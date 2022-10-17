@@ -50,6 +50,8 @@ fun SelectOptionScreen(
     subtotal: String,
     options: List<String>,
     onSelectionChanged: (String) -> Unit = {},
+    onCancelButtonClicked: () -> Unit = {},
+    onNextButtonClicked: () -> Unit = {},
     // TODO: add onCancelButtonClicked
     // TODO: add onNextButtonClicked
     modifier: Modifier = Modifier
@@ -89,14 +91,23 @@ fun SelectOptionScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ){
-            OutlinedButton(modifier = Modifier.weight(1f), onClick = { /* TODO: handle cancel button */ }) {
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                /* TODO: handle cancel button */
+                    onCancelButtonClicked
+                }
+            ) {
                 Text(stringResource(R.string.cancel))
             }
             Button(
                 modifier = Modifier.weight(1f),
                 // the button is enabled when the user makes a selection
                 enabled = selectedValue.isNotEmpty(),
-                onClick = { /* TODO: handle next button */ }
+                onClick = {
+                /* TODO: handle next button */
+                    onNextButtonClicked
+                }
             ) {
                 Text(stringResource(R.string.next))
             }
