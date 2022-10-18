@@ -51,6 +51,7 @@ import javax.security.auth.Subject
 @Composable
 fun CupcakeAppBar(
     canNavigateBack: Boolean,
+    currentScreen: CupcakeScreen,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -89,12 +90,17 @@ fun CupcakeApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     // TODO: Get the name of the current screen
+    val currentScreen = CupcakeScreen.valueOf(backStackEntry?.destination?.route ?: CupcakeScreen.Start.name)
 
     Scaffold(
         topBar = {
             CupcakeAppBar(
-                canNavigateBack = false,
-                navigateUp = { /* TODO: implement back navigation */ }
+                canNavigateBack = navController.previousBackStackEntry != null,
+                currentScreen = currentScreen,
+                navigateUp = {
+                /* TODO: implement back navigation */
+                             navController.navigateUp()
+                },
             )
         }
     ) { innerPadding ->
@@ -119,7 +125,7 @@ fun CupcakeApp(
                 val context = LocalContext.current
                 SelectOptionScreen(
                     subtotal = uiState.price,
-                    options = flavors.map { id -> stringResource(id) },
+                    options = flavors.map { id -> context.resources.getString(id) },
                     onSelectionChanged = { viewModel.setFlavor(it) },
                     onCancelButtonClicked = { cancelOrderAndNavigateToStart(viewModel, navController) },
                     onNextButtonClicked = {
